@@ -21,22 +21,12 @@ async function startBot() {
     process.exit(1);
   }
 
-  // Configure optional Spotify credentials in play-dl
+  // Spotify credentials are handled directly in src/commands/play.js
+  // via the Spotify Web API (client_credentials flow) — no play-dl token needed.
   if (process.env.SPOTIFY_CLIENT_ID && process.env.SPOTIFY_CLIENT_SECRET) {
-    try {
-      await play.setToken({
-        spotify: {
-          client_id: process.env.SPOTIFY_CLIENT_ID,
-          client_secret: process.env.SPOTIFY_CLIENT_SECRET,
-          market: 'US'
-        }
-      });
-      console.log('[SYSTEM] Spotify developer credentials injected into play-dl.');
-    } catch (error) {
-      console.warn('[WARNING] Failed to set Spotify credentials. Falling back to public guest token:', error.message);
-    }
+    console.log('[SYSTEM] Spotify credentials found. Spotify support is active.');
   } else {
-    console.log('[SYSTEM] No Spotify credentials found in .env. Falling back to public guest scraping token.');
+    console.log('[SYSTEM] No Spotify credentials found. Spotify URLs will not work.');
   }
 
   // Load commands and events
